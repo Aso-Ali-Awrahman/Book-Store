@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    {% if is_available %}
+
+        <div class="box-container" style="max-width: 800px;">
+
+            <h3 class="text-primary mb-3">Transaction history</h3>
+
+            <table class="table table-light table-bordered table-striped">
+
+                <thead>
+                    <tr class="text-info text-center text-capitalize">
+                        <th>title</th>
+                        <th>author</th>
+                        <th>genre</th>
+                        <th>quantity</th>
+                        <th>price</th>
+                        <th>date</th>
+                        <th>time</th>
+                        <th>return book</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for transaction in transactions %}
+
+                        <tr>
+                            <td>{{ transaction.title }}</td>    
+                            <td>{{ transaction.author }}</td>
+                            <td>{{ transaction.genre }}</td>
+                            <td>{{ transaction.stock_quantity }}</td>
+                            <td>{{ transaction.price }}</td>
+                            <td>{{ transaction.sold_date|date:"Y-m-d" }}</td>
+                            <td>{{ transaction.sold_time }}</td>
+                            {% if transaction.is_return %}
+                                <td class="text-danger">returned</td>
+                            {% else %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <td><button type="submit" name="return-button" value="{{ transaction.title }}/{{ transaction.sold_date|date:'Y-m-d' }}/{{ transaction.sold_time|time:'H:i:s.u' }}" class="btn btn-sm btn-danger">return</button></td>
+                                </form>
+                            {% endif %}
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+        <div class="box-container">
+            <h4 class="text-info text-capitalize m-3">no transaction occured yet</h4>
+        </div>
+    {% endif %}
+
+{% endblock %}

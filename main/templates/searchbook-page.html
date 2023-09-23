@@ -1,0 +1,152 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+
+    <div class="box-container mb-3">
+
+        <form action="" method="post">
+            {% csrf_token %}
+
+            <div class="d-flex justify-content-center">
+                <input type="text" name="search-book" class="form-control m-3 w-75" required placeholder="Search Book Title Or Book ID">
+            </div>
+            <button type="submit" name="search-button" class="btn btn-outline-primary">Search</button>
+
+        </form>
+
+    </div>
+
+
+    {% if is_search %}
+
+        {% if is_found %}
+
+            <div class="box-container mb-3" style="max-width: 800px; max-height: 350px; margin-top: 30px; display: block;">
+
+                <div class="row">
+
+                    <div class="col-3">
+                        <img src="{{ book.book_cover.url }}" width="170" height="270" alt="cover">
+                    </div>
+                    <div class="col-6 border border-dark">
+
+                        <h4 class="text-dark mt-3" style="font-weight: bold;">{{ book.title }}</h4>
+                        <h5 class="text-secondary">{{ book.author }}</h5>
+                        <h6 class="text-success">Price: {{ book.price }}</h6>
+                        <h6 class="text-secondary">Cost: {{ book.cost }}</h6>
+                        <h6 class="text-primary">Quantity: {{ book.stock_quantity }}</h6>
+                        <h6 class="text-success">Genre: {{ book.genre }}</h6>
+                        <h6 class="text-danger">Pages: {{ book.pages }}</h6>
+                        <h6 class="text-secondary">Publisher: {{ book.publisher }} / {{ book.year_published }}</h6>
+
+                    </div>
+                    <div class="col-3">
+                        <br>
+                        <button type="button" class="btn btn-info m-3" onclick="form_visibility(true, 'update-form')">Update Content</button>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            {% if book.stock_quantity != 0 %}
+                                <button type="submit" name="sell-button" value="{{ book.title }}" onclick="return confirm('Sell a book?');" class="btn btn-light m-3">Sell One Book</button>
+                            {% endif %}
+                            <button type="submit" name="delete-button" value="{{ book.title }}" onclick="return confirm('Are you sure deleting this book from the database?');" class="btn btn-danger m-3">Delete Book</button>  
+
+                        </form>
+ 
+                    </div>
+
+                </div> <!-- row -->
+                
+            </div>
+
+            <!-- form update -->
+            <div class="hover-div" id="update-form" style="display: none;">
+
+                <div class="box-container" style="max-width: 600px; margin-top: 160px; background-color: gainsboro;">
+            
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+            
+                        <div class="d-flex justify-content-center">
+            
+                            <div class="m-3">
+                                <input type="text" value="{{ book.title }}" autocomplete="off" name="title" class="form-control" placeholder="Book Title" required>
+                            </div>
+            
+                            <div class="m-3">
+                                <input type="text" value="{{ book.author }}" autocomplete="off" name="author" class="form-control" placeholder="Author Name" required>
+                            </div>
+            
+                        </div>
+            
+                        <div class="d-flex justify-content-center">
+            
+                            <div class="m-3">
+                                <input type="text" value="{{ book.genre }}" name="genre" class="form-control" placeholder="Genre" required>
+                            </div>
+            
+                            <div class="m-3 w-25">
+                                <input type="number" value="{{ book.pages }}" name="pages" class="form-control" placeholder="Pages" required minlength="1" required>
+                            </div>
+            
+                        </div>
+            
+                        <div class="d-flex justify-content-center">
+                            <div class="m-3">
+                                <input type="text" value="{{ book.publisher }}" name="publisher" class="form-control" placeholder="Publisher" required>
+                            </div>
+                            <div class="m-3">
+                                <input type="number" value="{{ book.year_published }}" autocomplete="off" name="year_published" class="form-control w-75" placeholder="Year Published" required>
+                            </div>
+                            <div class="m-3">
+                                <input type="number" name="qr_id" value="{{ book.qr_id }}" class="form-control" placeholder="Book QR Number" required>
+                            </div>
+                        </div>
+            
+                        <div class="d-flex justify-content-center">
+            
+                            <input type="number" value="{{ book.cost }}" name="cost" class="form-control m-3" placeholder="Cost" required>
+            
+                            <input type="number" value="{{ book.price }}" name="price" class="form-control m-3" placeholder="Price" required>
+            
+                            <input type="number" value="{{ book.stock_quantity }}" name="stock-quantity" class="form-control m-3" placeholder="Stock Quantity" required>
+            
+                        </div>
+            
+                        <div class="m-3">
+                            <button type="submit" value="{{ book.title }}" name="update-button" class="btn btn-primary">Update</button>
+
+                            <button type="button" class="btn btn-danger" onclick="form_visibility(false, 'update-form')">Close</button>
+                        </div>
+            
+                    </form>
+                    
+                </div><!-- box container -->
+            </div><!-- hover div -->
+
+            <script>
+                function form_visibility(show, div_form) {
+                    if (show) {
+                        document.getElementById(div_form).style.display = 'block'
+                    }
+                    else {
+                        document.getElementById(div_form).style.display = 'none'
+                    }
+                }
+            </script>
+        {% else %}
+            <div class="box-container" style="margin-top: 30px; display: block;">
+
+                <h4 class="text-danger mt-3 text-capitalize">{{ message }}</h4>
+
+            </div>
+        {% endif %}
+    
+    {% endif %}
+
+
+
+
+{% endblock %}

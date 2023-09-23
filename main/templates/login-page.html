@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <br><br>    
+    
+    <div class="box-container">
+
+        <h3 class="text-dark m-3">Login</h3>
+
+        <form action="" method="post">
+            {% csrf_token %}
+
+            <div class="d-flex justify-content-center align-items-center flex-column">
+
+                <div class="w-50 m-1">
+
+                    <input type="text" name="username" class="form-control bg-transparent text-center text-dark border border-primary" placeholder="user-name" required>
+
+                </div>
+
+                <div class="w-50 m-1">
+
+                    <input type="password" name="password" class="form-control bg-transparent text-center text-dark border border-primary" placeholder="password" required>
+
+                </div>
+
+                <div>
+                    <button type="submit" name="login-button" class="btn btn-outline-info m-3">Login</button>
+                </div>
+            
+            </div>
+
+        </form>
+
+    </div>
+
+
+{% endblock %}

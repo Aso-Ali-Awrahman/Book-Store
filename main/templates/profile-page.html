@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+
+    <div class="box-container" style="max-width: 600px;">
+
+        <div class="d-flex justify-content-between mb-3">
+            <h3 class="text-info" style="font-weight: bold;">{{ request.user.username}}</h3>
+
+            <button type="button" class="btn btn-sm"><img src="../static/images/logout.png" width="35" alt="Logout"></button>
+        </div>
+
+        <table class="table table-light bg-transparent table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Sold Books</th>
+                    <th>Revenue</th>
+                    <th>Available Books</th>
+                    <th>Stock Quantity</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    {% for stat in status %}
+                        <td>{{ stat.sold_books }}</td>
+                        <td>{{ stat.revenue }}</td>
+                        <td>{{ stat.available_books }}</td>
+                        <td>{{ stat.stock_quantity }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+
+        </table>
+        
+
+    </div>
+
+
+
+{% endblock %}

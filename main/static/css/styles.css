@@ -1,0 +1,47 @@
+
+.template-background {
+    background-image: url('../images/back-ground.jpg');
+    background-size: cover; /* Adjust how the image covers the background */
+    background-repeat: no-repeat; /* Prevent image from repeating */
+    background-attachment: fixed;
+}   
+
+.nav-background {
+    background: #7F7FD5;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #91EAE4, #86A8E7, #9595e3f9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+
+.navlink-style {
+    margin-right: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: aliceblue;
+}
+
+div.box-container {
+    max-width: 550px;
+    margin: auto;
+    margin-top: 100px;
+    text-align: center;
+    padding: 10px;
+    background-color: transparent;
+    border-radius: 15px;
+    box-shadow: 1px 10px 15px 5px rgba(197, 27, 27, 0.2);
+}
+
+.hover-div {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%); 
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+

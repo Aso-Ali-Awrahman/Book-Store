@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <div class="box-container" style="max-width: 700px;">
+
+        <h3 class="text-warning mb-3" style="font-weight: bold;">Add Book To The Store</h3>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="d-flex justify-content-between">
+
+                <div class="m-3">
+                    <input type="text" autocomplete="off" name="title" class="form-control" placeholder="Book Title" required>
+                </div>
+
+                <div class="m-3">
+                    <input type="file" name="book-cover" accept=".jpg, .jpeg" class="form-control" required>
+                </div>
+
+                <div class="m-3">
+                    <input type="text" autocomplete="off" name="author" class="form-control" placeholder="Author Name" required>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between">
+
+                <div class="m-3">
+                    <input type="text" name="genre" class="form-control" placeholder="Genre" required>
+                </div>
+
+                <div class="m-3">
+                    <select name="language" class="form-select" required>
+                        <option value="" disabled selected>Language</option>
+                        <option value="English">English</option>
+                        <option value="Kurdish">Kurdish</option>
+                        <option value="Arabic">Arabic</option>
+                    </select>
+                </div>
+
+                <div class="m-3">
+                    <input type="number" name="pages" class="form-control w-50" placeholder="Pages" required minlength="1" required>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <div class="m-3">
+                    <input type="text" name="publisher" class="form-control" placeholder="Publisher" required>
+                </div>
+                <div class="m-3">
+                    <input type="number" autocomplete="off" name="year_published" class="form-control w-75" placeholder="Year Published" required>
+                </div>
+                <div class="m-3">
+                    <input type="number" name="qr_id" class="form-control" placeholder="Book QR Number" required>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between w-75">
+
+                <input type="number" name="cost" class="form-control m-3" placeholder="Cost" required>
+
+                <input type="number" name="price" class="form-control m-3 w-75" placeholder="Price" required>
+
+                <input type="number" name="stock-quantity" class="form-control m-3" placeholder="Stock Quantity" required>
+
+            </div>
+
+            <div class="m-3">
+                <button type="submit" name="addbook-button" class="btn btn-outline-success">Add Book</button>
+            </div>
+
+        </form>
+        
+
+
+    </div>
+
+
+{% endblock %}
