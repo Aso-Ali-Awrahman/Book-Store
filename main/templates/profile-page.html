@@ -9,7 +9,10 @@
         <div class="d-flex justify-content-between mb-3">
             <h3 class="text-info" style="font-weight: bold;">{{ request.user.username}}</h3>
 
-            <button type="button" class="btn btn-sm"><img src="../static/images/logout.png" width="35" alt="Logout"></button>
+            <form method="post">
+                {% csrf_token %}
+                <button type="sumbit" name="logout-button" class="btn btn-sm" onclick="return confirm('Logout?')"><img src="../static/images/logout.png" width="35" alt="Logout"></button>
+            </form>        
         </div>
 
         <table class="table table-light bg-transparent table-hover table-bordered">

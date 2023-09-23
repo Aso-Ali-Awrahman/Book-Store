@@ -55,7 +55,7 @@ class SoldBooks(models.Model):
 class StatusReport(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    sold_books = models.IntegerField()
-    revenue = models.FloatField()
-    available_books = models.IntegerField()
-    stock_quantity = models.IntegerField()
+    sold_books = models.IntegerField(default=0)
+    revenue = models.FloatField(default=0.0)
+    available_books = models.IntegerField(default=0)
+    stock_quantity = models.IntegerField(default=0)

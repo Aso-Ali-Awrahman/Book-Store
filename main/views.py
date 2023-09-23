@@ -13,14 +13,14 @@ import os
 def status_report_handler(_user, _quantity, action, change_available=False):
     """is_final_book is for the deleting the book and also when the last book has been sold it will deduct the available books by 1"""
     status = StatusReport.objects.get(user=_user)
-    if status.available_books == 0 or status.stock_quantity == 0:
-        return
     
     if action == 'add':
         if change_available:
             status.available_books += 1
         status.stock_quantity += _quantity
     elif action == 'delete':
+        if status.available_books == 0 or status.stock_quantity == 0:
+            return
         status.stock_quantity -= _quantity
         if change_available:
             status.available_books -= 1
@@ -37,7 +37,7 @@ def sold_book_handler(_user, bookobj, _quantity, _price):
         status_report_handler(_user=_user, _quantity=_quantity, action='delete')
         
     SoldBooks.objects.create(user=_user, title=bookobj.title, author=bookobj.author, genre=bookobj.genre, 
-                             price=_price, stock_quantity=_quantity).save()
+                             price=_price, stock_quantity=_quantity)
     return True
 
     
@@ -76,9 +76,57 @@ def login_page(request):
 @login_required(login_url='login')
 def profile_page(request):
     
+    if request.user.is_superuser:
+        return redirect('super-profile')
+    
+    if request.method == 'POST':
+        if 'logout-button' in request.POST:
+            logout(request)
+            return redirect('login')
+    
     status = StatusReport.objects.filter(user=request.user)
     
     return render(request, 'profile-page.html', {'status': status})
+
+
+login_required(login_url='login')
+def super_profile_page(request):
+    
+    if not request.user.is_superuser:
+        return redirect('profile')
+
+    if request.method == 'POST':
+        if 'logout-button' in request.POST:
+            logout(request)
+            return redirect('login')
+        
+        elif 'create-user-button' in request.POST:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            
+            if username and password:
+                try:
+                    User.objects.get(username=username)
+                except User.DoesNotExist:
+                    user = User.objects.create_user(username=username, password=password)
+                    StatusReport.objects.create(user=user)  # the other values is set by default in the model
+                
+        elif 'delete-user-button' in request.POST:
+            username = request.POST.get('delete-user-button')  # getting the value
+            try:
+                User.objects.get(username=username).delete()
+            except User.DoesNotExist:
+                pass
+
+    context = {
+        'status': None,
+        'users': None
+    }
+    
+    context['status'] = StatusReport.objects.filter(user=request.user)
+    context['users'] = User.objects.filter(is_superuser=False)
+    
+    return render(request, 'super-profile-page.html', context)
 
 
 @login_required(login_url='login')
@@ -126,6 +174,7 @@ def soldbook_page(request):
             quantity = request.POST.get('stock-quantity')
             price = request.POST.get('price')
             
+            # checking for invalid inputs
             if not title or not quantity or not price:
                 return redirect('error-page', 'do not mess the website structure!')
             elif int(quantity) <= 0:
@@ -144,9 +193,7 @@ def soldbook_page(request):
                 return redirect('transactions')
             else:
                 return render(request, 'soldbook-page.html', {'error':True, 'message':f'inventory for {book.title} is {book.stock_quantity}!'})
-
-        
-    
+ 
     return render(request, 'soldbook-page.html')
 
 

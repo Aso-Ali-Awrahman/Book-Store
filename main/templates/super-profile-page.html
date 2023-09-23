@@ -1,0 +1,111 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+
+    <div class="box-container" style="max-width: 600px;">
+
+        <div class="d-flex justify-content-between mb-3">
+            <h3 class="text-info" style="font-weight: bold;">{{ request.user.username}}</h3>
+            <form method="post">
+                {% csrf_token %}
+                <button type="sumbit" name="logout-button" class="btn btn-sm" onclick="return confirm('Logout?')"><img src="../static/images/logout.png" width="35" alt="Logout"></button>
+            </form>
+        </div>
+
+        <table class="table table-light bg-transparent table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Sold Books</th>
+                    <th>Revenue</th>
+                    <th>Available Books</th>
+                    <th>Stock Quantity</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    {% for stat in status %}
+                        <td>{{ stat.sold_books }}</td>
+                        <td>{{ stat.revenue }}</td>
+                        <td>{{ stat.available_books }}</td>
+                        <td>{{ stat.stock_quantity }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+
+        </table>
+        
+
+    </div>
+
+    <div class="box-container" style="max-width: 500px; max-height: 250px; margin-top: 10px; overflow: auto;">
+
+        <button type="button" class="btn btn-outline-success m-3" onclick="form_visibility(true, 'create-form')">Create User</button>
+
+        {% if users %}
+
+            <table class="table table-light table-hover table-bordered">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Join Date</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.date_joined|date:'Y-m-d' }}</td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <td><button type="submit" name="delete-user-button" value="{{ user.username }}" class="btn btn-sm btn-danger" onclick="return confirm('do you want delete this user?')">Delete</button></td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+            
+        {% endif %}
+
+        <!-- hover div form -->
+        <div class="hover-div" id="create-form" style="display: none;">
+            
+            <div class="box-container" style="max-width: 280px; margin-top: 30vh; background-color: gainsboro;">
+                <form method="post" class="m-1">
+                    {% csrf_token %}
+                    <input type="text" autocomplete="off" name="username" class="form-control m-1" placeholder="user name" required>
+                    <input type="password" name="password" class="form-control m-1" placeholder="password" required>
+
+                    <div class="m-1">
+                        <button type="button" class="btn btn-outline-danger" onclick="form_visibility(false, 'create-form')">Close</button>
+                        <button type="submit" name="create-user-button" class="btn btn-outline-success">Create</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <script>
+            function form_visibility(show, div_form) {
+                if (show) {
+                    document.getElementById(div_form).style.display = 'block'
+                }
+                else {
+                    document.getElementById(div_form).style.display = 'none'
+                }
+            }
+        </script>
+
+    </div>
+
+
+
+{% endblock %}
